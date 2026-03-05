@@ -25,7 +25,7 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="15">
-                <Button Text="♟   Impostor" Style="{StaticResource GameRowButtonStyle}" />
+                <Button Text="🤫    El Impostor" Style="{StaticResource GameRowButtonStyle}" Clicked="OnImpostorClicked" />
                 <Button Text="🏁   4 cartas" Style="{StaticResource GameRowButtonStyle}" />
                 <Button Text="🃏   Poker" Style="{StaticResource GameRowButtonStyle}" />
                 <Button Text="🎲   Proximamente..." Style="{StaticResource GameRowButtonStyle}" />

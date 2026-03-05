@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MataGames.Views.ImpostorVotingPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#12121A">
+
+    <Grid Padding="25">
+        <VerticalStackLayout Spacing="25">
+
+            <Label Text="⚖️ La Votación" 
+                   TextColor="White" 
+                   FontSize="32" 
+                   FontAttributes="Bold" 
+                   HorizontalTextAlignment="Center"
+                   Margin="0,20,0,10"/>
+
+            <Label Text="Debatid y elegid a un sospechoso:" 
+                   TextColor="#8E8E93" 
+                   FontSize="18" 
+                   HorizontalTextAlignment="Center"/>
+
+            <Border Style="{StaticResource ConfigCardStyle}" VerticalOptions="FillAndExpand">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20"/>
+                </Border.StrokeShape>
+                <CollectionView x:Name="listaVotacion" 
+                                SelectionMode="Single"
+                                SelectionChanged="OnVotoSeleccionado">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="#2C2C3E" Margin="0,5" Padding="15">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12"/>
+                                </Border.StrokeShape>
+                                <Label Text="{Binding .}" 
+                                       TextColor="White" 
+                                       FontSize="20" 
+                                       FontAttributes="Bold" 
+                                       HorizontalTextAlignment="Center"/>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+
+            <Label Text="⚠️ Una vez elegido, no hay vuelta atrás." 
+                   TextColor="#FF3B30" 
+                   FontSize="14" 
+                   HorizontalTextAlignment="Center" 
+                   FontAttributes="Italic"/>
+
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

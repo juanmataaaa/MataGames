@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MataGames.Views.ImpostorSetupPage"
+             Title="El Impostor 🤫"
+             BackgroundColor="#12121A">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}" />
+    </Shell.BackButtonBehavior>
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="25" Margin="0,10,0,0">
+
+            <Border Style="{StaticResource ConfigCardStyle}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="👥 Lista de Jugadores" Style="{StaticResource CardTitleStyle}" />
+
+                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                        <Entry x:Name="txtNuevoJugador" Placeholder="Nombre de tu amigo..." Style="{StaticResource DarkEntryStyle}" Grid.Column="0" />
+                        <Button Text="Añadir" Style="{StaticResource ActionButtonStyle}" Grid.Column="1" Clicked="OnAddJugadorClicked" />
+                    </Grid>
+
+                    <CollectionView x:Name="listaJugadores" 
+                                    HeightRequest="140"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnJugadorSeleccionado">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding .}" TextColor="#E0E0E0" FontSize="18" FontAttributes="Bold" Margin="5,8"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource ConfigCardStyle}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="15">
+
+                    <Grid>
+                        <Label Text="📝 Palabras Secretas" Style="{StaticResource CardTitleStyle}" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Button Text="📦 Paquetes" Style="{StaticResource ActionButtonStyle}" HorizontalOptions="End" Clicked="OnElegirPaqueteClicked"/>
+                    </Grid>
+
+                    <VerticalStackLayout x:Name="layoutManual" IsVisible="True" Spacing="15">
+                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                            <Entry x:Name="txtNuevaPalabra" Placeholder="Ej: Manzana, Coche..." Style="{StaticResource DarkEntryStyle}" Grid.Column="0" />
+                            <Button Text="Añadir" Style="{StaticResource ActionButtonStyle}" Grid.Column="1" Clicked="OnAddPalabraClicked" />
+                        </Grid>
+
+                        <Button x:Name="btnVerPalabras" 
+                                Text="👀 Ver Palabras (Mín. 10)" 
+                                BackgroundColor="#2C2C3E" 
+                                TextColor="#A0A0B0" 
+                                CornerRadius="10" 
+                                HeightRequest="45"
+                                Clicked="OnVerPalabrasClicked"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout x:Name="layoutAutomatico" IsVisible="False" Spacing="10">
+                        <Label x:Name="lblPaqueteActivo" Text="Paquete activo: Ninguno" TextColor="#00C853" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                        <Label Text="🤫 Las palabras están ocultas para evitar trampas." TextColor="#8E8E93" HorizontalTextAlignment="Center" FontSize="14" />
+
+                        <Button Text="Volver a Manual" 
+                                BackgroundColor="#2C2C3E" 
+                                TextColor="White" 
+                                CornerRadius="10" 
+                                HeightRequest="45"
+                                Clicked="OnVolverManualClicked" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource ConfigCardStyle}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15"/>
+                </Border.StrokeShape>
+                <Grid ColumnDefinitions="*, Auto">
+                    <Label Text="🕵️ Impostores:" Style="{StaticResource CardTitleStyle}" VerticalOptions="Center" Grid.Column="0"/>
+
+                    <Border BackgroundColor="#12121A" Stroke="#2C2C3E" StrokeThickness="1" HorizontalOptions="End" Grid.Column="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="40, 40, 40">
+                            <Button Text="-" BackgroundColor="Transparent" TextColor="White" FontSize="20" Grid.Column="0" Clicked="OnRestarImpostorClicked"/>
+                            <Label x:Name="lblNumImpostores" Text="1" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+                            <Button Text="+" BackgroundColor="Transparent" TextColor="#6C63FF" FontSize="20" FontAttributes="Bold" Grid.Column="2" Clicked="OnSumarImpostorClicked"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Button Text="¡EMPEZAR PARTIDA!" 
+                    Style="{StaticResource StartGameButtonStyle}"
+                    Margin="0,15,0,30"
+                    Clicked="OnEmpezarPartidaClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

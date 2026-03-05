@@ -2,6 +2,6 @@
 {
     public class Jugador
     {
-        public string Nombre { get; set; }
+        public required string Nombre { get; set; }
     }
 }

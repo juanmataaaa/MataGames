@@ -488,5 +488,59 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+    <Style x:Key="ConfigCardStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="#1E1E2E" />
+        <Setter Property="Stroke" Value="#2C2C3E" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="15" />
+    </Style>
+
+    <Style x:Key="CardTitleStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <Style x:Key="DarkEntryStyle" TargetType="Entry">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="PlaceholderColor" Value="#8E8E93" />
+        <Setter Property="BackgroundColor" Value="#12121A" />
+    </Style>
+
+    <Style x:Key="ActionButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#6C63FF" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+
+    <Style x:Key="StartGameButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#00C853" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="HeightRequest" Value="60" />
+    </Style>
+    <Style x:Key="RoleCardStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="#1E1E2E" />
+        <Setter Property="Stroke" Value="#2C2C3E" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="25" />
+    </Style>
+
+    <Style x:Key="InnocentWordStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="#00C853" />
+        <Setter Property="FontSize" Value="42" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="ImpostorWordStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="#FF3B30" />
+        <Setter Property="FontSize" Value="38" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="LineBreakMode" Value="WordWrap" />
+    </Style>
 </ResourceDictionary>
 

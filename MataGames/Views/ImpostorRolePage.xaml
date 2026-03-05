@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MataGames.Views.ImpostorRolePage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#12121A">
+
+    <Grid Padding="25">
+        <VerticalStackLayout Spacing="30" VerticalOptions="Center">
+
+            <Grid x:Name="gridTarjeta" HeightRequest="350" HorizontalOptions="Center" WidthRequest="300">
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnVerRolClicked" />
+                </Grid.GestureRecognizers>
+
+                <Grid.Shadow>
+                    <Shadow Brush="Black" Offset="5,5" Radius="10" Opacity="0.5" />
+                </Grid.Shadow>
+
+                <Border x:Name="cardFront" Style="{StaticResource RoleCardStyle}" RotationY="0" IsVisible="True">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="15" VerticalOptions="Center">
+                        <Label x:Name="lblNombreJugador" 
+                               Text="Juan 👑" 
+                               TextColor="White" 
+                               FontSize="38" 
+                               FontAttributes="Bold" 
+                               HorizontalTextAlignment="Center"/>
+
+                        <Label Text="Toca para ver tu rol" 
+                               TextColor="#8E8E93" 
+                               FontSize="18" 
+                               HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border x:Name="cardBack" Style="{StaticResource RoleCardStyle}" RotationY="180" IsVisible="False">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="15" VerticalOptions="Center">
+
+                        <Label x:Name="lblTituloRol" 
+                               Text="La palabra secreta es:" 
+                               TextColor="White" 
+                               FontSize="18" 
+                               HorizontalTextAlignment="Center"/>
+
+                        <Label x:Name="lblRol" 
+                               Text="ROL" 
+                               Style="{StaticResource InnocentWordStyle}"/>
+
+                        <Label Text="¡Shh! No dejes que nadie vea la pantalla." 
+                               TextColor="#8E8E93" 
+                               FontSize="14" 
+                               FontAttributes="Italic" 
+                               HorizontalTextAlignment="Center"/>
+
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Button x:Name="btnFinalizarTurno" 
+                    Text="✅ Entendido" 
+                    Style="{StaticResource StartGameButtonStyle}" 
+                    Clicked="OnSiguienteClicked" 
+                    IsVisible="False" 
+                    HeightRequest="70"/>
+
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
