@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MataGames.Views.NombreJugadorPopup"
+             Shell.NavBarIsVisible="False"
+             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}"
+             BackgroundColor="#12121A">
+
+    <Grid Padding="25">
+
+        <VerticalStackLayout Spacing="30" VerticalOptions="Center">
+
+            <VerticalStackLayout Spacing="10" Margin="0,0,0,20">
+                <Label x:Name="lblBienvenida"
+                       FontSize="38"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap" />
+
+                <Label Text="Elige tu próximo desafío:"
+                       FontSize="16"
+                       TextColor="#8E8E93"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="15">
+                <Button Text="♟   Impostor" Style="{StaticResource GameRowButtonStyle}" />
+                <Button Text="🏁   4 cartas" Style="{StaticResource GameRowButtonStyle}" />
+                <Button Text="🃏   Poker" Style="{StaticResource GameRowButtonStyle}" />
+                <Button Text="🎲   Proximamente..." Style="{StaticResource GameRowButtonStyle}" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+        <Button Text="⚙️"
+                FontSize="24"
+                HorizontalOptions="Start"
+                VerticalOptions="End"
+                HeightRequest="60"
+                WidthRequest="60"
+                CornerRadius="30"
+                BackgroundColor="#1E1E2E"
+                BorderColor="#2C2C3E"
+                BorderWidth="1"
+                Margin="5,0,0,10"
+                Clicked="OnSettingsClicked" />
+
+    </Grid>
+</ContentPage>
