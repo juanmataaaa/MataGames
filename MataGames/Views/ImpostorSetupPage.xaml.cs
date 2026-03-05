@@ -171,16 +171,48 @@ public partial class ImpostorSetupPage : ContentPage
             switch (accion)
             {
                 case "⚽ Futbolistas":
-                    palabrasPaquete = new List<string> { "Messi", "Cristiano Ronaldo", "Maradona", "Pelé", "Neymar", "Zidane", "Ronaldinho", "Iniesta", "Xavi", "Mbappé", "Haaland", "Casillas" };
+                    palabrasPaquete = new List<string> {
+            "Messi", "Cristiano Ronaldo", "Maradona", "Pelé", "Neymar", "Zidane", "Ronaldinho", "Iniesta", "Xavi", "Mbappé", "Haaland", "Casillas",
+            "Modric", "Vinícius", "Bellingham", "Benzema", "Griezmann", "Sergio Ramos", "Piqué", "Puyol", "Busquets", "Kante", "De Bruyne", "Salah",
+            "Lewandowski", "Neuer", "Buffon", "Roberto Carlos", "Figo", "Ronaldo Nazário", "Romário", "Stoichkov", "Cruyff", "Platini", "Di Stéfano",
+            "Eusebio", "George Best", "Bobby Charlton", "Bobby Moore", "Beckenbauer", "Maldini", "Baresi", "Cafu", "Roberto Baggio", "Del Piero",
+            "Totti", "Pirlo", "Seedorf", "Kaká", "Rivaldo", "Thierry Henry", "Vieira", "Bergkamp", "Cantona", "Shearer", "Rooney", "Gerrard",
+            "Lampard", "Scholes", "Giggs", "John Terry", "Ferdinand"
+        };
                     break;
+
                 case "🏠 Cosas de Casa":
-                    palabrasPaquete = new List<string> { "Televisor", "Sofá", "Microondas", "Nevera", "Cama", "Lámpara", "Espejo", "Lavadora", "Silla", "Mesa", "Tenedor", "Escoba" };
+                    palabrasPaquete = new List<string> {
+            "Televisor", "Sofá", "Microondas", "Nevera", "Cama", "Lámpara", "Espejo", "Lavadora", "Silla", "Mesa", "Tenedor", "Escoba",
+            "Licuadora", "Tostadora", "Horno", "Lavavajillas", "Congelador", "Batidora", "Cafetera", "Freidora de aire", "Plancha", "Aspiradora",
+            "Secador", "Cepillo de dientes", "Jabón", "Toalla", "Sábana", "Almohada", "Manta", "Cortina", "Alfombra", "Cuadro", "Reloj", "Florero",
+            "Estantería", "Escritorio", "Armario", "Cómoda", "Zapatero", "Perchero", "Puerta", "Ventana", "Balcón", "Grifo", "Ducha", "Inodoro",
+            "Bidet", "Sartén", "Olla", "Cazo", "Plato", "Vaso", "Copa", "Cuchillo", "Cuchara", "Servilleta", "Mantel", "Escurreplatos", "Cubo de basura",
+            "Recogedor", "Fregona", "Bayeta"
+        };
                     break;
+
                 case "🏅 Deportes":
-                    palabrasPaquete = new List<string> { "Fútbol", "Baloncesto", "Tenis", "Natación", "Voleibol", "Ciclismo", "Boxeo", "Béisbol", "Golf", "Rugby", "Atletismo", "Judo" };
+                    palabrasPaquete = new List<string> {
+            "Fútbol", "Baloncesto", "Tenis", "Natación", "Voleibol", "Ciclismo", "Boxeo", "Béisbol", "Golf", "Rugby", "Atletismo", "Judo",
+            "Pádel", "Surf", "Esquí", "Snowboard", "Patinaje", "Hockey", "Waterpolo", "Balonmano", "Críquet", "Lacrosse", "Bádminton", "Tenis de mesa",
+            "Squash", "Remo", "Piragüismo", "Vela", "Windsurf", "Kitesurf", "Motociclismo", "Fórmula 1", "Rally", "Ciclismo de montaña", "BMX",
+            "Triatlón", "Pentatlón", "Esgrima", "Tiro con arco", "Tiro olímpico", "Gimnasia rítmica", "Gimnasia artística", "Halterofilia", "Crossfit",
+            "Yoga", "Pilates", "Karate", "Taekwondo", "Muay Thai", "Lucha libre", "Sumo", "Escalada", "Senderismo", "Alpinismo", "Paracaidismo",
+            "Puentismo", "Ajedrez", "Billar", "Dardos", "Bolos", "Petanca", "Polo"
+        };
                     break;
+
                 case "🎮 Videojuegos":
-                    palabrasPaquete = new List<string> { "Minecraft", "Fortnite", "Super Mario", "GTA V", "Zelda", "Call of Duty", "FIFA", "Pokémon", "Tetris", "Pac-Man", "League of Legends", "Roblox" };
+                    palabrasPaquete = new List<string> {
+            "Minecraft", "Fortnite", "Super Mario", "GTA V", "Zelda", "Call of Duty", "FIFA", "Pokémon", "Tetris", "Pac-Man", "League of Legends", "Roblox",
+            "Halo", "Gears of War", "God of War", "Uncharted", "The Last of Us", "Resident Evil", "Silent Hill", "Metal Gear Solid", "Final Fantasy",
+            "Dragon Quest", "Kingdom Hearts", "Street Fighter", "Mortal Kombat", "Tekken", "SoulCalibur", "Super Smash Bros", "Mario Kart", "Sonic",
+            "Crash Bandicoot", "Spyro", "Tomb Raider", "Assassin's Creed", "Far Cry", "Watch Dogs", "Splinter Cell", "Rainbow Six", "Ghost Recon",
+            "Fallout", "Skyrim", "Oblivion", "Starfield", "Mass Effect", "Dragon Age", "The Witcher", "Cyberpunk 2077", "Elden Ring", "Dark Souls",
+            "Bloodborne", "Sekiro", "Monster Hunter", "Devil May Cry", "Bayonetta", "Persona", "Yakuza", "Red Dead Redemption", "Bioshock",
+            "Borderlands", "Destiny", "Overwatch", "Valorant"
+        };
                     break;
             }
 
