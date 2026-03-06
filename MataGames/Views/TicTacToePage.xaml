@@ -4,64 +4,58 @@
              x:Class="MataGames.Views.TicTacToePage"
              NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False"
-             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}"
-             BackgroundColor="#12121A">
+             BackgroundColor="#0F0F13">
 
-    <Grid>
-        <Grid HorizontalOptions="Fill" VerticalOptions="Start" Margin="20,20,20,0" ZIndex="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+    <ScrollView>
+        <Grid RowDefinitions="Auto, *, Auto" Padding="15" VerticalOptions="FillAndExpand">
+            <Grid Grid.Row="0" HeightRequest="60" Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="70" />
+                </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0" WidthRequest="55" HeightRequest="55">
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnBackClicked" />
-                </Grid.GestureRecognizers>
-                <Ellipse Fill="#1E1E2E" Stroke="#2C2C3E" StrokeThickness="2"/>
-                <Label Text="←" TextColor="White" FontSize="38" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" TranslationY="-8" />
+                <Button Grid.Column="0" Text="←" Clicked="OnBackClicked" 
+                        BackgroundColor="#1E1E2E" CornerRadius="12" FontSize="22" 
+                        FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="50" HeightRequest="50"/>
+
+                <Label Grid.Column="1" Text="3 EN RAYA" TextColor="#00C853" 
+                       FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                <Button Grid.Column="2" Text="4 EN RAYA" Clicked="OnSwitchToConnectFourClicked" 
+                        BackgroundColor="#1E1E2E" FontSize="9" CornerRadius="10" 
+                        HeightRequest="40" HorizontalOptions="End" VerticalOptions="Center"/>
             </Grid>
 
-            <Button Grid.Column="2" 
-                    Text="↔️ Cambiar a 4 en Raya" 
-                    FontSize="12"
-                    FontAttributes="Bold"
-                    BackgroundColor="#1E1E2E" 
-                    TextColor="White" 
-                    CornerRadius="25" 
-                    HeightRequest="50"
-                    Padding="15,0"
-                    BorderColor="#2C2C3E"
-                    BorderWidth="1"
-                    Clicked="OnSwitchToConnectFourClicked" />
+            <VerticalStackLayout Grid.Row="1" Spacing="10" VerticalOptions="Center">
+                <FlexLayout x:Name="layoutDificultad" JustifyContent="Center" Wrap="Wrap">
+                    <Button x:Name="btnFacil" Text="Fácil" Margin="2" WidthRequest="70" Clicked="OnDificultadClicked" BackgroundColor="#1E1E2E" CornerRadius="10" FontSize="12"/>
+                    <Button x:Name="btnNormal" Text="Normal" Margin="2" WidthRequest="70" Clicked="OnDificultadClicked" BackgroundColor="#00C853" CornerRadius="10" FontSize="12"/>
+                    <Button x:Name="btnDificil" Text="Difícil" Margin="2" WidthRequest="70" Clicked="OnDificultadClicked" BackgroundColor="#1E1E2E" CornerRadius="10" FontSize="12"/>
+                    <Button x:Name="btnImposible" Text="💀" Margin="2" WidthRequest="50" Clicked="OnDificultadClicked" BackgroundColor="#1E1E2E" CornerRadius="10"/>
+                </FlexLayout>
+
+                <Label x:Name="lblEstado" Text="CONECTA O ELIGE DIFICULTAD" TextColor="#8E8E93" FontSize="16" HorizontalTextAlignment="Center" Margin="0,5" FontAttributes="Bold"/>
+
+                <Frame BackgroundColor="#161621" CornerRadius="20" Padding="10" BorderColor="#2C2C3E" HorizontalOptions="Center" HasShadow="False">
+                    <Grid x:Name="gridTablero" ColumnDefinitions="90,90,90" RowDefinitions="90,90,90" ColumnSpacing="10" RowSpacing="10" />
+                </Frame>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="2" Spacing="10" VerticalOptions="End" Margin="0,10">
+                <Button x:Name="btnReiniciar" Text="🔄 REINICIAR" Clicked="OnReiniciarClicked" 
+                        BackgroundColor="#1E1E2E" CornerRadius="12" HeightRequest="55" FontAttributes="Bold"/>
+
+                <Grid x:Name="gridOnlineControls" ColumnDefinitions="*, *" ColumnSpacing="10">
+                    <Button x:Name="btnCrearSala" Grid.Column="0" Text="🏠 CREAR" Clicked="OnCrearSalaClicked" 
+                            BackgroundColor="#161621" BorderColor="#2C2C3E" BorderWidth="1" CornerRadius="12" HeightRequest="55" FontAttributes="Bold"/>
+                    <Button x:Name="btnBuscarSala" Grid.Column="1" Text="🔍 UNIRSE" Clicked="OnBuscarSalaClicked" 
+                            BackgroundColor="#161621" BorderColor="#2C2C3E" BorderWidth="1" CornerRadius="12" HeightRequest="55" FontAttributes="Bold"/>
+                </Grid>
+
+                <Button x:Name="btnSalirOnline" Text="🚫 ABANDONAR ONLINE" Clicked="OnSalirOnlineClicked" 
+                        BackgroundColor="#FF3B30" CornerRadius="12" HeightRequest="55" IsVisible="False" FontAttributes="Bold"/>
+            </VerticalStackLayout>
         </Grid>
-
-        <VerticalStackLayout Spacing="20" Padding="25" VerticalOptions="Center">
-            <Label Text="3 EN RAYA" TextColor="White" FontSize="32" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-
-            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
-                <Button x:Name="btnFacil" Text="Fácil" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
-                <Button x:Name="btnNormal" Text="Normal" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#00C853" CornerRadius="10"/>
-                <Button x:Name="btnDificil" Text="Difícil" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
-                <Button x:Name="btnImposible" Text="💀" WidthRequest="60" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
-            </HorizontalStackLayout>
-
-            <Label x:Name="lblEstado" Text="Tu turno (X)" TextColor="#8E8E93" FontSize="20" HorizontalTextAlignment="Center" />
-
-            <Frame BackgroundColor="#1E1E2E" CornerRadius="20" Padding="10" HorizontalOptions="Center" BorderColor="#2C2C3E">
-                <Frame.Shadow>
-                    <Shadow Brush="#00C853" Offset="0,0" Radius="30" Opacity="0.3" />
-                </Frame.Shadow>
-                <Grid x:Name="gridTablero" ColumnDefinitions="100,100,100" RowDefinitions="100,100,100" ColumnSpacing="10" RowSpacing="10" />
-            </Frame>
-
-            <Button Text="🔄 Reiniciar Partida" Clicked="OnReiniciarClicked" BackgroundColor="#2C2C3E" CornerRadius="15" HeightRequest="60" FontAttributes="Bold"/>
-
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Button Text="🏠 Crear sala" Clicked="OnCrearSalaClicked" BackgroundColor="#1E1E2E" CornerRadius="15" HeightRequest="60" WidthRequest="155" BorderColor="#2C2C3E" BorderWidth="1" FontAttributes="Bold"/>
-                <Button Text="🔍 Buscar sala" Clicked="OnBuscarSalaClicked" BackgroundColor="#1E1E2E" CornerRadius="15" HeightRequest="60" WidthRequest="155" BorderColor="#2C2C3E" BorderWidth="1" FontAttributes="Bold"/>
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
-    </Grid>
+    </ScrollView>
 </ContentPage>
