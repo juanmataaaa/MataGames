@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MataGames.Views.ConnectFourPage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}"
+             BackgroundColor="#12121A">
+
+    <Grid>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Start" Margin="20,20,20,0" ZIndex="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" WidthRequest="55" HeightRequest="55">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackClicked" />
+                </Grid.GestureRecognizers>
+                <Ellipse Fill="#1E1E2E" Stroke="#2C2C3E" StrokeThickness="2"/>
+                <Label Text="←" TextColor="White" FontSize="38" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" TranslationY="-8" />
+            </Grid>
+
+            <Button Grid.Column="2" 
+                    Text="↔️ Volver a 3 en Raya" 
+                    FontSize="12"
+                    FontAttributes="Bold"
+                    BackgroundColor="#1E1E2E" 
+                    TextColor="White" 
+                    CornerRadius="25" 
+                    HeightRequest="50"
+                    Padding="15,0"
+                    BorderColor="#2C2C3E"
+                    BorderWidth="1"
+                    Clicked="OnSwitchToTicTacToeClicked" />
+        </Grid>
+
+        <ScrollView>
+            <VerticalStackLayout Spacing="20" Padding="25" VerticalOptions="Center" Margin="0,70,0,0">
+                <Label Text="4 EN RAYA" TextColor="White" FontSize="32" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                    <Button x:Name="btnFacil" Text="Fácil" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
+                    <Button x:Name="btnNormal" Text="Normal" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#00C853" CornerRadius="10"/>
+                    <Button x:Name="btnDificil" Text="Difícil" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
+                    <Button x:Name="btnImposible" Text="💀" WidthRequest="60" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
+                </HorizontalStackLayout>
+
+                <Label x:Name="lblEstado" Text="Toca una columna para soltar ficha (Verde)" TextColor="#8E8E93" FontSize="16" HorizontalTextAlignment="Center" />
+
+                <Frame BackgroundColor="#1E1E2E" CornerRadius="20" Padding="10" HorizontalOptions="Center" BorderColor="#00C853" HasShadow="True">
+                    <Frame.Shadow>
+                        <Shadow Brush="#00C853" Offset="0,0" Radius="30" Opacity="0.3" />
+                    </Frame.Shadow>
+
+                    <Grid x:Name="gridTablero" 
+                          ColumnDefinitions="45,45,45,45,45,45,45" 
+                          RowDefinitions="45,45,45,45,45,45" 
+                          ColumnSpacing="8" 
+                          RowSpacing="8">
+
+                    </Grid>
+                </Frame>
+
+                <Button Text="🔄 Reiniciar Partida" Clicked="OnReiniciarClicked" BackgroundColor="#2C2C3E" CornerRadius="15" HeightRequest="60" FontAttributes="Bold"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

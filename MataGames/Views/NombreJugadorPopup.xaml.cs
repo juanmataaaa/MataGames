@@ -22,7 +22,11 @@ public partial class NombreJugadorPopup : ContentPage
         // 2. La vista solo "pinta" lo que el controlador le dice
         lblBienvenida.Text = _controller.GenerarMensajeBienvenida();
     }
-
+    private async void OnTicTacToeClicked(object sender, EventArgs e)
+    {
+        // Viajamos a la pantalla del 3 en Raya
+        await Navigation.PushAsync(new TicTacToePage());
+    }
     // Bloquea el botón físico de atrás en Android
     protected override bool OnBackButtonPressed()
     {

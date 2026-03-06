@@ -1,5 +1,6 @@
 ﻿using MataGames.Controllers;
 using MataGames.Models;
+using Microsoft.Maui.Controls;
 
 namespace MataGames.Views;
 
@@ -7,12 +8,17 @@ public partial class ImpostorSetupPage : ContentPage
 {
     private ImpostorSetupController _controller;
 
-    // Comando para controlar la flecha de atrás de la barra superior
+    // Comando para controlar la flecha de atrás original (por si acaso)
     public Command BackCommand { get; }
 
     public ImpostorSetupPage(Jugador creador)
     {
         InitializeComponent();
+
+        // --- BLOQUEO TOTAL DE LA BARRA BLANCA ---
+        NavigationPage.SetHasNavigationBar(this, false);
+        Shell.SetNavBarIsVisible(this, false);
+        Shell.SetBackButtonBehavior(this, new BackButtonBehavior { IsVisible = false });
 
         // Inicializamos el comando de ir atrás y conectamos el BindingContext
         BackCommand = new Command(ConfirmarSalida);
@@ -29,11 +35,17 @@ public partial class ImpostorSetupPage : ContentPage
         ActualizarBotonPalabras();
     }
 
-    // Bloquea el botón físico de atrás en Android
+    // Bloquea el botón físico de atrás en Android para mostrar el aviso
     protected override bool OnBackButtonPressed()
     {
         ConfirmarSalida();
         return true;
+    }
+
+    // Acción para el botón circular personalizado que creamos en el XAML
+    private void OnBackClicked(object sender, EventArgs e)
+    {
+        ConfirmarSalida();
     }
 
     private async void ConfirmarSalida()
@@ -46,48 +58,29 @@ public partial class ImpostorSetupPage : ContentPage
         }
     }
 
+    // --- LÓGICA DE JUGADORES ---
+
     private async void OnAddJugadorClicked(object sender, EventArgs e)
     {
         if (!string.IsNullOrWhiteSpace(txtNuevoJugador.Text))
         {
-            // El controlador nos dice si es un éxito o un duplicado
             if (_controller.AgregarJugador(txtNuevoJugador.Text))
             {
-                txtNuevoJugador.Text = string.Empty; // Éxito, limpiamos
+                txtNuevoJugador.Text = string.Empty;
             }
             else
             {
-                // Duplicado o vacío
                 await DisplayAlert("Nombre Duplicado", "Ya hay un jugador con este nombre. Por favor, introduce uno diferente.", "OK");
                 txtNuevoJugador.Focus();
             }
         }
     }
 
-    private async void OnAddPalabraClicked(object sender, EventArgs e)
-    {
-        if (!string.IsNullOrWhiteSpace(txtNuevaPalabra.Text))
-        {
-            // El controlador nos dice si es un éxito o un duplicado
-            if (_controller.AgregarPalabra(txtNuevaPalabra.Text))
-            {
-                txtNuevaPalabra.Text = string.Empty; // Éxito, limpiamos
-                ActualizarBotonPalabras();
-            }
-            else
-            {
-                // Duplicado o vacío
-                await DisplayAlert("Palabra Duplicada", "Esta palabra ya ha sido añadida. Introduce otra.", "OK");
-                txtNuevaPalabra.Focus();
-            }
-        }
-    }
-    // Lógica para borrar jugador tocándolo en la lista
     private async void OnJugadorSeleccionado(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is string jugadorSeleccionado)
         {
-            listaJugadores.SelectedItem = null; // Quita la selección visual
+            listaJugadores.SelectedItem = null;
 
             if (jugadorSeleccionado.Contains("👑"))
             {
@@ -104,6 +97,24 @@ public partial class ImpostorSetupPage : ContentPage
         }
     }
 
+    // --- LÓGICA DE PALABRAS ---
+
+    private async void OnAddPalabraClicked(object sender, EventArgs e)
+    {
+        if (!string.IsNullOrWhiteSpace(txtNuevaPalabra.Text))
+        {
+            if (_controller.AgregarPalabra(txtNuevaPalabra.Text))
+            {
+                txtNuevaPalabra.Text = string.Empty;
+                ActualizarBotonPalabras();
+            }
+            else
+            {
+                await DisplayAlert("Palabra Duplicada", "Esta palabra ya ha sido añadida. Introduce otra.", "OK");
+                txtNuevaPalabra.Focus();
+            }
+        }
+    }
 
     private async void OnVerPalabrasClicked(object sender, EventArgs e)
     {
@@ -133,6 +144,8 @@ public partial class ImpostorSetupPage : ContentPage
         btnVerPalabras.TextColor = _controller.Palabras.Count > 0 ? Colors.White : Color.FromArgb("#A0A0B0");
     }
 
+    // --- LÓGICA DE IMPOSTORES ---
+
     private void OnRestarImpostorClicked(object sender, EventArgs e)
     {
         if (_controller.NumeroImpostores > 1)
@@ -155,11 +168,10 @@ public partial class ImpostorSetupPage : ContentPage
         }
     }
 
+    // --- LÓGICA DE PAQUETES TEMÁTICOS ---
 
-    // --- LÓGICA DE PAQUETES AUTOMÁTICOS ---
     private async void OnElegirPaqueteClicked(object sender, EventArgs e)
     {
-        // Las opciones que le saldrán al jugador
         string[] paquetes = { "⚽ Futbolistas", "🏠 Cosas de Casa", "🏅 Deportes", "🎮 Videojuegos" };
         string accion = await DisplayActionSheet("Elige un Paquete Temático", "Cancelar", null, paquetes);
 
@@ -167,59 +179,53 @@ public partial class ImpostorSetupPage : ContentPage
         {
             List<string> palabrasPaquete = new List<string>();
 
-            // Cargamos el paquete según lo que haya elegido (mínimo 10 palabras por paquete)
             switch (accion)
             {
                 case "⚽ Futbolistas":
                     palabrasPaquete = new List<string> {
-            "Messi", "Cristiano Ronaldo", "Maradona", "Pelé", "Neymar", "Zidane", "Ronaldinho", "Iniesta", "Xavi", "Mbappé", "Haaland", "Casillas",
-            "Modric", "Vinícius", "Bellingham", "Benzema", "Griezmann", "Sergio Ramos", "Piqué", "Puyol", "Busquets", "Kante", "De Bruyne", "Salah",
-            "Lewandowski", "Neuer", "Buffon", "Roberto Carlos", "Figo", "Ronaldo Nazário", "Romário", "Stoichkov", "Cruyff", "Platini", "Di Stéfano",
-            "Eusebio", "George Best", "Bobby Charlton", "Bobby Moore", "Beckenbauer", "Maldini", "Baresi", "Cafu", "Roberto Baggio", "Del Piero",
-            "Totti", "Pirlo", "Seedorf", "Kaká", "Rivaldo", "Thierry Henry", "Vieira", "Bergkamp", "Cantona", "Shearer", "Rooney", "Gerrard",
-            "Lampard", "Scholes", "Giggs", "John Terry", "Ferdinand"
-        };
+                        "Messi", "Cristiano Ronaldo", "Maradona", "Pelé", "Neymar", "Zidane", "Ronaldinho", "Iniesta", "Xavi", "Mbappé", "Haaland", "Casillas",
+                        "Modric", "Vinícius", "Bellingham", "Benzema", "Griezmann", "Sergio Ramos", "Piqué", "Puyol", "Busquets", "Kante", "De Bruyne", "Salah",
+                        "Lewandowski", "Neuer", "Buffon", "Roberto Carlos", "Figo", "Ronaldo Nazário", "Romário", "Stoichkov", "Cruyff", "Platini", "Di Stéfano",
+                        "Eusebio", "George Best", "Bobby Charlton", "Bobby Moore", "Beckenbauer", "Maldini", "Baresi", "Cafu", "Roberto Baggio", "Del Piero",
+                        "Totti", "Pirlo", "Seedorf", "Kaká", "Rivaldo", "Thierry Henry", "Vieira", "Bergkamp", "Cantona", "Shearer", "Rooney", "Gerrard",
+                        "Lampard", "Scholes", "Giggs", "John Terry", "Ferdinand"
+                    };
                     break;
-
                 case "🏠 Cosas de Casa":
                     palabrasPaquete = new List<string> {
-            "Televisor", "Sofá", "Microondas", "Nevera", "Cama", "Lámpara", "Espejo", "Lavadora", "Silla", "Mesa", "Tenedor", "Escoba",
-            "Licuadora", "Tostadora", "Horno", "Lavavajillas", "Congelador", "Batidora", "Cafetera", "Freidora de aire", "Plancha", "Aspiradora",
-            "Secador", "Cepillo de dientes", "Jabón", "Toalla", "Sábana", "Almohada", "Manta", "Cortina", "Alfombra", "Cuadro", "Reloj", "Florero",
-            "Estantería", "Escritorio", "Armario", "Cómoda", "Zapatero", "Perchero", "Puerta", "Ventana", "Balcón", "Grifo", "Ducha", "Inodoro",
-            "Bidet", "Sartén", "Olla", "Cazo", "Plato", "Vaso", "Copa", "Cuchillo", "Cuchara", "Servilleta", "Mantel", "Escurreplatos", "Cubo de basura",
-            "Recogedor", "Fregona", "Bayeta"
-        };
+                        "Televisor", "Sofá", "Microondas", "Nevera", "Cama", "Lámpara", "Espejo", "Lavadora", "Silla", "Mesa", "Tenedor", "Escoba",
+                        "Licuadora", "Tostadora", "Horno", "Lavavajillas", "Congelador", "Batidora", "Cafetera", "Freidora de aire", "Plancha", "Aspiradora",
+                        "Secador", "Cepillo de dientes", "Jabón", "Toalla", "Sábana", "Almohada", "Manta", "Cortina", "Alfombra", "Cuadro", "Reloj", "Florero",
+                        "Estantería", "Escritorio", "Armario", "Cómoda", "Zapatero", "Perchero", "Puerta", "Ventana", "Balcón", "Grifo", "Ducha", "Inodoro",
+                        "Bidet", "Sartén", "Olla", "Cazo", "Plato", "Vaso", "Copa", "Cuchillo", "Cuchara", "Servilleta", "Mantel", "Escurreplatos", "Cubo de basura",
+                        "Recogedor", "Fregona", "Bayeta"
+                    };
                     break;
-
                 case "🏅 Deportes":
                     palabrasPaquete = new List<string> {
-            "Fútbol", "Baloncesto", "Tenis", "Natación", "Voleibol", "Ciclismo", "Boxeo", "Béisbol", "Golf", "Rugby", "Atletismo", "Judo",
-            "Pádel", "Surf", "Esquí", "Snowboard", "Patinaje", "Hockey", "Waterpolo", "Balonmano", "Críquet", "Lacrosse", "Bádminton", "Tenis de mesa",
-            "Squash", "Remo", "Piragüismo", "Vela", "Windsurf", "Kitesurf", "Motociclismo", "Fórmula 1", "Rally", "Ciclismo de montaña", "BMX",
-            "Triatlón", "Pentatlón", "Esgrima", "Tiro con arco", "Tiro olímpico", "Gimnasia rítmica", "Gimnasia artística", "Halterofilia", "Crossfit",
-            "Yoga", "Pilates", "Karate", "Taekwondo", "Muay Thai", "Lucha libre", "Sumo", "Escalada", "Senderismo", "Alpinismo", "Paracaidismo",
-            "Puentismo", "Ajedrez", "Billar", "Dardos", "Bolos", "Petanca", "Polo"
-        };
+                        "Fútbol", "Baloncesto", "Tenis", "Natación", "Voleibol", "Ciclismo", "Boxeo", "Béisbol", "Golf", "Rugby", "Atletismo", "Judo",
+                        "Pádel", "Surf", "Esquí", "Snowboard", "Patinaje", "Hockey", "Waterpolo", "Balonmano", "Críquet", "Lacrosse", "Bádminton", "Tenis de mesa",
+                        "Squash", "Remo", "Piragüismo", "Vela", "Windsurf", "Kitesurf", "Motociclismo", "Fórmula 1", "Rally", "Ciclismo de montaña", "BMX",
+                        "Triatlón", "Pentatlón", "Esgrima", "Tiro con arco", "Tiro olímpico", "Gimnasia rítmica", "Gimnasia artística", "Halterofilia", "Crossfit",
+                        "Yoga", "Pilates", "Karate", "Taekwondo", "Muay Thai", "Lucha libre", "Sumo", "Escalada", "Senderismo", "Alpinismo", "Paracaidismo",
+                        "Puentismo", "Ajedrez", "Billar", "Dardos", "Bolos", "Petanca", "Polo"
+                    };
                     break;
-
                 case "🎮 Videojuegos":
                     palabrasPaquete = new List<string> {
-            "Minecraft", "Fortnite", "Super Mario", "GTA V", "Zelda", "Call of Duty", "FIFA", "Pokémon", "Tetris", "Pac-Man", "League of Legends", "Roblox",
-            "Halo", "Gears of War", "God of War", "Uncharted", "The Last of Us", "Resident Evil", "Silent Hill", "Metal Gear Solid", "Final Fantasy",
-            "Dragon Quest", "Kingdom Hearts", "Street Fighter", "Mortal Kombat", "Tekken", "SoulCalibur", "Super Smash Bros", "Mario Kart", "Sonic",
-            "Crash Bandicoot", "Spyro", "Tomb Raider", "Assassin's Creed", "Far Cry", "Watch Dogs", "Splinter Cell", "Rainbow Six", "Ghost Recon",
-            "Fallout", "Skyrim", "Oblivion", "Starfield", "Mass Effect", "Dragon Age", "The Witcher", "Cyberpunk 2077", "Elden Ring", "Dark Souls",
-            "Bloodborne", "Sekiro", "Monster Hunter", "Devil May Cry", "Bayonetta", "Persona", "Yakuza", "Red Dead Redemption", "Bioshock",
-            "Borderlands", "Destiny", "Overwatch", "Valorant"
-        };
+                        "Minecraft", "Fortnite", "Super Mario", "GTA V", "Zelda", "Call of Duty", "FIFA", "Pokémon", "Tetris", "Pac-Man", "League of Legends", "Roblox",
+                        "Halo", "Gears of War", "God of War", "Uncharted", "The Last of Us", "Resident Evil", "Silent Hill", "Metal Gear Solid", "Final Fantasy",
+                        "Dragon Quest", "Kingdom Hearts", "Street Fighter", "Mortal Kombat", "Tekken", "SoulCalibur", "Super Smash Bros", "Mario Kart", "Sonic",
+                        "Crash Bandicoot", "Spyro", "Tomb Raider", "Assassin's Creed", "Far Cry", "Watch Dogs", "Splinter Cell", "Rainbow Six", "Ghost Recon",
+                        "Fallout", "Skyrim", "Oblivion", "Starfield", "Mass Effect", "Dragon Age", "The Witcher", "Cyberpunk 2077", "Elden Ring", "Dark Souls",
+                        "Bloodborne", "Sekiro", "Monster Hunter", "Devil May Cry", "Bayonetta", "Persona", "Yakuza", "Red Dead Redemption", "Bioshock",
+                        "Borderlands", "Destiny", "Overwatch", "Valorant"
+                    };
                     break;
             }
 
-            // Enviamos todo al controlador
             _controller.CargarPaqueteAutomatico(accion, palabrasPaquete);
 
-            // Actualizamos la interfaz: ocultamos lo manual, mostramos lo automático
             layoutManual.IsVisible = false;
             layoutAutomatico.IsVisible = true;
             lblPaqueteActivo.Text = $"Paquete activado:\n{accion}";
@@ -234,6 +240,8 @@ public partial class ImpostorSetupPage : ContentPage
         ActualizarBotonPalabras();
     }
 
+    // --- INICIAR JUEGO ---
+
     private async void OnEmpezarPartidaClicked(object sender, EventArgs e)
     {
         if (_controller.Jugadores.Count < 3)
@@ -242,13 +250,12 @@ public partial class ImpostorSetupPage : ContentPage
             return;
         }
 
-        if (!_controller.EsModoAutomatico && _controller.Palabras.Count < 10)
+        if (!_controller.EsModoAutomatico && _controller.Palabras.Count < 5)
         {
-            await DisplayAlert("Faltan palabras", $"Necesitas al menos 10 palabras secretas. Llevas {_controller.Palabras.Count}.", "OK");
+            await DisplayAlert("Faltan palabras", $"Necesitas al menos 5 palabras secretas para jugar.", "OK");
             return;
         }
 
-        // 👇 AÑADE ESTA LÍNEA PARA VIAJAR A LA NUEVA PANTALLA 👇
         await Navigation.PushAsync(new ImpostorRolePage(
             _controller.Jugadores.ToList(),
             _controller.Palabras.ToList(),

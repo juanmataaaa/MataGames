@@ -26,9 +26,12 @@
 
             <VerticalStackLayout Spacing="15">
                 <Button Text="🤫    El Impostor" Style="{StaticResource GameRowButtonStyle}" Clicked="OnImpostorClicked" />
-                <Button Text="🏁   4 cartas" Style="{StaticResource GameRowButtonStyle}" />
-                <Button Text="🃏   Poker" Style="{StaticResource GameRowButtonStyle}" />
-                <Button Text="🎲   Proximamente..." Style="{StaticResource GameRowButtonStyle}" />
+
+                <Button Text="❌    3 en Raya" Style="{StaticResource GameRowButtonStyle}" Clicked="OnTicTacToeClicked" />
+
+                <Button Text="🏁    4 cartas" Style="{StaticResource GameRowButtonStyle}" />
+                <Button Text="🃏    Poker" Style="{StaticResource GameRowButtonStyle}" />
+                <Button Text="🎲    Proximamente..." Style="{StaticResource GameRowButtonStyle}" />
             </VerticalStackLayout>
 
         </VerticalStackLayout>
