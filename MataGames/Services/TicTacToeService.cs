@@ -10,7 +10,7 @@ namespace MataGames.Services
 
         public TicTacToeService()
         {
-            // Inicializamos la conexión AQUÍ para que nunca sea null
+            // Inicializamos la conexión
             _connection = new HubConnectionBuilder()
                 .WithUrl("https://matagames-server-juanma-abcwc0ekdghkb9c3.canadacentral-01.azurewebsites.net/gamehub")
                 .WithAutomaticReconnect()
@@ -44,6 +44,26 @@ namespace MataGames.Services
         {
             if (_connection.State == HubConnectionState.Connected)
                 await _connection.InvokeAsync("SendMove", salaId, indice, ficha);
+        }
+
+        // --- NUEVOS MÉTODOS DE CONTROL BLINDADOS ---
+
+        public async Task SolicitarRevanchaSegura(string salaId)
+        {
+            if (_connection.State == HubConnectionState.Connected)
+                await _connection.InvokeAsync("SolicitarRevancha", salaId);
+        }
+
+        public async Task AceptarRevanchaSegura(string salaId)
+        {
+            if (_connection.State == HubConnectionState.Connected)
+                await _connection.InvokeAsync("AceptarRevancha", salaId);
+        }
+
+        public async Task AbandonarSalaSegura(string salaId)
+        {
+            if (_connection.State == HubConnectionState.Connected)
+                await _connection.InvokeAsync("AbandonarSala", salaId);
         }
     }
 }

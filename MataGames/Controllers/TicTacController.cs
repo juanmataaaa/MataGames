@@ -8,18 +8,19 @@ namespace MataGames.Controllers
 
     public class TicTacToeController
     {
-        public string[] Tablero { get; private set; }
-        public bool EsTurnoJugador { get; set; }
-        public bool JuegoTerminado { get; private set; }
-        public Dificultad NivelDificultad { get; set; }
+        public string[] Tablero { get; private set; } = new string[9];
+        public bool EsTurnoJugador { get; set; } = true;
+        public bool JuegoTerminado { get; set; }
+        public Dificultad NivelDificultad { get; set; } = Dificultad.Normal;
         public int[] IndicesGanadores { get; private set; }
+        public string NombreRival { get; set; } = "Rival";
 
-        public TicTacToeController()
+        public void ReiniciarJuego()
         {
             Tablero = new string[9];
-            EsTurnoJugador = true;
             JuegoTerminado = false;
-            NivelDificultad = Dificultad.Normal;
+            EsTurnoJugador = true;
+            IndicesGanadores = null;
         }
 
         public bool HacerMovimiento(int indice, string jugador)
@@ -32,16 +33,45 @@ namespace MataGames.Controllers
             return false;
         }
 
+        public string VerificarEstadoJuego()
+        {
+            int[,] winPos = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+            for (int i = 0; i < 8; i++)
+            {
+                if (Tablero[winPos[i, 0]] != null && Tablero[winPos[i, 0]] == Tablero[winPos[i, 1]] && Tablero[winPos[i, 0]] == Tablero[winPos[i, 2]])
+                {
+                    IndicesGanadores = new int[] { winPos[i, 0], winPos[i, 1], winPos[i, 2] };
+                    JuegoTerminado = true;
+                    return Tablero[winPos[i, 0]];
+                }
+            }
+            if (Tablero.All(x => x != null)) { JuegoTerminado = true; return "Empate"; }
+            return null;
+        }
+
+        // --- INTELIGENCIA ARTIFICIAL NIVELADA ---
         public int ObtenerMovimientoBot()
         {
             Random rnd = new Random();
             switch (NivelDificultad)
             {
-                case Dificultad.Facil: return MovimientoAleatorio();
-                case Dificultad.Normal: return rnd.Next(100) < 50 ? MovimientoMinimax() : MovimientoAleatorio();
-                case Dificultad.Dificil: return rnd.Next(100) < 85 ? MovimientoMinimax() : MovimientoAleatorio();
-                case Dificultad.Imposible: return MovimientoMinimax();
-                default: return MovimientoAleatorio();
+                case Dificultad.Facil:
+                    return MovimientoAleatorio();
+
+                case Dificultad.Normal:
+                    int movNormal = BuscarAtaqueODefensa();
+                    return movNormal != -1 ? movNormal : MovimientoAleatorio();
+
+                case Dificultad.Dificil:
+                    if (rnd.Next(100) < 80) return MovimientoMinimax();
+                    int movDificil = BuscarAtaqueODefensa();
+                    return movDificil != -1 ? movDificil : MovimientoAleatorio();
+
+                case Dificultad.Imposible:
+                    return MovimientoMinimax();
+
+                default:
+                    return MovimientoAleatorio();
             }
         }
 
@@ -51,6 +81,33 @@ namespace MataGames.Controllers
             return disponibles.Count > 0 ? disponibles[new Random().Next(disponibles.Count)] : -1;
         }
 
+        // Lógica humana: ataca si puede ganar, defiende si le van a ganar
+        private int BuscarAtaqueODefensa()
+        {
+            // 1. ¿Puedo ganar en este turno? (El bot es la 'O')
+            for (int i = 0; i < 9; i++)
+            {
+                if (Tablero[i] == null)
+                {
+                    Tablero[i] = "O";
+                    if (VerificarGanadorInterno(Tablero) == "O") { Tablero[i] = null; return i; }
+                    Tablero[i] = null;
+                }
+            }
+            // 2. ¿El jugador me va a ganar en su próximo turno? (El jugador es la 'X')
+            for (int i = 0; i < 9; i++)
+            {
+                if (Tablero[i] == null)
+                {
+                    Tablero[i] = "X";
+                    if (VerificarGanadorInterno(Tablero) == "X") { Tablero[i] = null; return i; }
+                    Tablero[i] = null;
+                }
+            }
+            return -1;
+        }
+
+        // Algoritmo perfecto e invencible
         private int MovimientoMinimax()
         {
             int mejorPuntaje = int.MinValue;
@@ -95,7 +152,7 @@ namespace MataGames.Controllers
                 for (int i = 0; i < 9; i++)
                 {
                     if (board[i] == null)
-                    {
+                    {   
                         board[i] = "X";
                         bestScore = Math.Min(Minimax(board, depth + 1, true), bestScore);
                         board[i] = null;
@@ -105,22 +162,7 @@ namespace MataGames.Controllers
             }
         }
 
-        public string VerificarEstadoJuego()
-        {
-            int[,] winPos = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
-            for (int i = 0; i < 8; i++)
-            {
-                if (Tablero[winPos[i, 0]] != null && Tablero[winPos[i, 0]] == Tablero[winPos[i, 1]] && Tablero[winPos[i, 0]] == Tablero[winPos[i, 2]])
-                {
-                    IndicesGanadores = new int[] { winPos[i, 0], winPos[i, 1], winPos[i, 2] };
-                    JuegoTerminado = true;
-                    return Tablero[winPos[i, 0]];
-                }
-            }
-            if (Tablero.All(x => x != null)) { JuegoTerminado = true; return "Empate"; }
-            return null;
-        }
-
+        // Función interna rápida para que el bot simule las jugadas en su cabeza
         private string VerificarGanadorInterno(string[] b)
         {
             int[,] winPos = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
@@ -130,14 +172,6 @@ namespace MataGames.Controllers
                     return b[winPos[i, 0]];
             }
             return b.All(x => x != null) ? "Empate" : null;
-        }
-
-        public void ReiniciarJuego()
-        {
-            Tablero = new string[9];
-            JuegoTerminado = false;
-            EsTurnoJugador = true;
-            IndicesGanadores = null;
         }
     }
 }
