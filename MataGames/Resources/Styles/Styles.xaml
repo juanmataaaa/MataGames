@@ -489,37 +489,61 @@
         </Setter>
     </Style>
     <Style x:Key="ConfigCardStyle" TargetType="Border">
-        <Setter Property="BackgroundColor" Value="#1E1E2E" />
-        <Setter Property="Stroke" Value="#2C2C3E" />
-        <Setter Property="StrokeThickness" Value="1" />
-        <Setter Property="Padding" Value="15" />
+        <Setter Property="BackgroundColor" Value="#1A1A24" />
+        <Setter Property="Stroke" Value="#2A2A3A" />
+        <Setter Property="StrokeThickness" Value="1.5" />
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="Margin" Value="0, 5, 0, 15" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="20" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#000000" Offset="0,8" Radius="15" Opacity="0.3" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="CardTitleStyle" TargetType="Label">
-        <Setter Property="TextColor" Value="White" />
+        <Setter Property="TextColor" Value="#FFFFFF" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="Margin" Value="0,0,0,15" />
+        <Setter Property="CharacterSpacing" Value="1" />
     </Style>
 
     <Style x:Key="DarkEntryStyle" TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="#0F0F16" />
         <Setter Property="TextColor" Value="White" />
-        <Setter Property="PlaceholderColor" Value="#8E8E93" />
-        <Setter Property="BackgroundColor" Value="#12121A" />
+        <Setter Property="PlaceholderColor" Value="#666677" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="HeightRequest" Value="50" />
     </Style>
 
     <Style x:Key="ActionButtonStyle" TargetType="Button">
         <Setter Property="BackgroundColor" Value="#6C63FF" />
         <Setter Property="TextColor" Value="White" />
-        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="Padding" Value="20,0" />
     </Style>
 
     <Style x:Key="StartGameButtonStyle" TargetType="Button">
         <Setter Property="BackgroundColor" Value="#00C853" />
         <Setter Property="TextColor" Value="White" />
-        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontSize" Value="18" />
         <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="CornerRadius" Value="15" />
-        <Setter Property="HeightRequest" Value="60" />
+        <Setter Property="CornerRadius" Value="25" />
+        <Setter Property="HeightRequest" Value="65" />
+        <Setter Property="Margin" Value="0,15,0,40" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#00C853" Offset="0,5" Radius="15" Opacity="0.4" />
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style x:Key="RoleCardStyle" TargetType="Border">
         <Setter Property="BackgroundColor" Value="#1E1E2E" />

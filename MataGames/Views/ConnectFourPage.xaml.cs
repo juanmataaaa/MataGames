@@ -1,12 +1,13 @@
 ﻿using MataGames.Controllers;
 using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Devices; // VIBRACIÓN
 
 namespace MataGames.Views;
 
 public partial class ConnectFourPage : ContentPage
 {
     private ConnectFourController _controller;
-    private Border[,] _celdas = new Border[6, 7]; // Para referenciar los agujeros visualmente
+    private Border[,] _celdas = new Border[6, 7];
 
     public ConnectFourPage()
     {
@@ -15,7 +16,6 @@ public partial class ConnectFourPage : ContentPage
         CrearSoporteReal();
     }
 
-    // Genera la malla de agujeros del "soporte" de plástico
     private void CrearSoporteReal()
     {
         gridTablero.Children.Clear();
@@ -23,21 +23,19 @@ public partial class ConnectFourPage : ContentPage
         {
             for (int col = 0; col < 7; col++)
             {
-                // Un Border circular gris oscuro para simular el agujero vacío
                 var agujero = new Border
                 {
-                    BackgroundColor = Color.FromArgb("#12121A"), // Fondo oscuro
-                    Stroke = Color.FromArgb("#2C2C3E"), // Borde gris
+                    BackgroundColor = Color.FromArgb("#12121A"),
+                    Stroke = Color.FromArgb("#2C2C3E"),
                     StrokeThickness = 1,
-                    StrokeShape = new Ellipse(), // Forma circular
+                    StrokeShape = new Ellipse(),
                     Padding = 2,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
-                    WidthRequest = 45,
-                    HeightRequest = 45
+                    WidthRequest = 36,
+                    HeightRequest = 36
                 };
 
-                // Le asignamos un gesto de toque para toda la columna
                 var tapGesture = new TapGestureRecognizer { CommandParameter = col };
                 tapGesture.Tapped += OnColumnaClicked;
                 agujero.GestureRecognizers.Add(tapGesture);
@@ -54,15 +52,15 @@ public partial class ConnectFourPage : ContentPage
 
         int columna = (int)((TapGestureRecognizer)((Border)sender).GestureRecognizers[0]).CommandParameter;
 
-        // Intentamos soltar ficha del jugador (1)
         int filaDondeCayo = _controller.DropFicha(columna, 1);
         if (filaDondeCayo != -1)
         {
-            await ColocarFichaVisual(filaDondeCayo, columna, Color.FromArgb("#00C853")); // Verde Neón
+            try { HapticFeedback.Default.Perform(HapticFeedbackType.Click); } catch { }
+
+            await ColocarFichaVisual(filaDondeCayo, columna, Color.FromArgb("#00C853"));
 
             if (VerificarFin(filaDondeCayo, columna)) return;
 
-            // Turno del Bot
             _controller.EsTurnoJugador = false;
             lblEstado.Text = "Bot pensando...";
             await Task.Delay(500);
@@ -73,7 +71,9 @@ public partial class ConnectFourPage : ContentPage
                 int filaBot = _controller.DropFicha(movBot, 2);
                 if (filaBot != -1)
                 {
-                    await ColocarFichaVisual(filaBot, movBot, Color.FromArgb("#FF3B30")); // Rojo Neón
+                    try { HapticFeedback.Default.Perform(HapticFeedbackType.Click); } catch { }
+
+                    await ColocarFichaVisual(filaBot, movBot, Color.FromArgb("#FF3B30"));
                     if (VerificarFin(filaBot, movBot)) return;
                 }
             }
@@ -87,21 +87,17 @@ public partial class ConnectFourPage : ContentPage
 
     private async Task ColocarFichaVisual(int f, int c, Color colorNeon)
     {
-        // Creamos la ficha "flotando" arriba del soporte
         var ficha = new Ellipse
         {
             Fill = colorNeon,
-            WidthRequest = 35,
-            HeightRequest = 35,
+            WidthRequest = 30,
+            HeightRequest = 30,
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center,
-            TranslationY = -(f + 1) * 55 // Posición inicial arriba del soporte
+            TranslationY = -(f + 1) * 46
         };
 
-        // Metemos la ficha visualmente en el mismo Grid del soporte
         gridTablero.Add(ficha, c, f);
-
-        // Animación de caída (gravedad)
         await ficha.TranslateTo(0, 0, 300, Easing.BounceOut);
     }
 
@@ -110,19 +106,62 @@ public partial class ConnectFourPage : ContentPage
         string res = _controller.VerificarEstadoJuego(f, c);
         if (res == null) return false;
 
-        if (res == "Empate") lblEstado.Text = "¡Empate! 🤝";
-        else lblEstado.Text = res == "X" ? "¡Ganaste! 🎉" : "Perdiste... 🤖";
+        if (res == "Empate")
+        {
+            lblEstado.Text = "¡Empate! 🤝";
+        }
+        else
+        {
+            lblEstado.Text = res == "X" ? "¡Ganaste! 🎉" : "Perdiste... 💀";
+            DibujarLineaGanadora(); // Llamamos a la magia visual
+        }
         return true;
+    }
+
+    // NUEVA FUNCIÓN: Dibuja la línea sobre las fichas
+    private void DibujarLineaGanadora()
+    {
+        var fichas = _controller.FichasGanadoras;
+        if (fichas == null || fichas.Count < 4) return;
+
+        var inicio = fichas.First();
+        var fin = fichas.Last();
+
+        // Matemáticas para encontrar el centro exacto de la ficha inicial y final.
+        // Fórmula: Columna/Fila * (AnchoFicha + Espaciado) + (AnchoFicha / 2)
+        double startX = (inicio[1] * 46) + 19;
+        double startY = (inicio[0] * 46) + 19;
+        double endX = (fin[1] * 46) + 19;
+        double endY = (fin[0] * 46) + 19;
+
+        var linea = new Line
+        {
+            X1 = startX,
+            Y1 = startY,
+            X2 = endX,
+            Y2 = endY,
+            Stroke = Color.FromArgb("#FFFFFF"), // Línea blanca
+            StrokeThickness = 6, // Grosor de la línea
+            StrokeLineCap = PenLineCap.Round, // Bordes redondeados
+            Opacity = 0 // Empieza invisible para animarse
+        };
+
+        // Le decimos que ocupe todo el tablero para que no se corte
+        gridTablero.Add(linea, 0, 0);
+        Grid.SetColumnSpan(linea, 7);
+        Grid.SetRowSpan(linea, 6);
+
+        // Animamos su aparición
+        linea.FadeTo(1, 400, Easing.CubicOut);
     }
 
     private void OnReiniciarClicked(object sender, EventArgs e)
     {
         _controller.ReiniciarJuego();
         lblEstado.Text = "Toca una columna para soltar ficha (Verde)";
-        CrearSoporteReal(); // Regeneramos para vaciar las fichas animadas
+        CrearSoporteReal();
     }
 
-    // Gestión de Dificultad
     private void OnDificultadClicked(object sender, EventArgs e)
     {
         var btn = (Button)sender;
@@ -137,11 +176,10 @@ public partial class ConnectFourPage : ContentPage
         OnReiniciarClicked(null, null);
     }
 
-    // Botones de navegación de cabecera
     private async void OnBackClicked(object sender, EventArgs e) { await Navigation.PopAsync(); }
     private async void OnSwitchToTicTacToeClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new TicTacToePage());
-        Navigation.RemovePage(this); // Limpieza
+        Navigation.RemovePage(this);
     }
 }

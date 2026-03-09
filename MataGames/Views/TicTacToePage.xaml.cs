@@ -2,6 +2,7 @@
 using MataGames.Services;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Maui.Storage;
+using Microsoft.Maui.Devices;
 
 namespace MataGames.Views;
 
@@ -23,7 +24,6 @@ public partial class TicTacToePage : ContentPage
         _controller = new TicTacToeController();
         _onlineService = new TicTacToeService();
 
-        // Carga tu nombre de la app de forma segura
         _miNombreReal = Preferences.Get("NombreJugador", Preferences.Get("UserName", Preferences.Get("Nombre", "Jugador")));
         if (string.IsNullOrWhiteSpace(_miNombreReal)) _miNombreReal = "Jugador";
 
@@ -36,7 +36,6 @@ public partial class TicTacToePage : ContentPage
     {
         _onlineService.OnMoveReceived += (idx, ficha) => RecibirJugadaRival(idx, ficha);
 
-        // Anfitrión: Recibe al invitado
         _onlineService.HubConnection.On<string, string>("RecibirPeticion", (nombreInvitado, connectionId) => {
             MainThread.BeginInvokeOnMainThread(async () => {
                 _controller.NombreRival = string.IsNullOrWhiteSpace(nombreInvitado) ? "Invitado" : nombreInvitado;
@@ -51,10 +50,9 @@ public partial class TicTacToePage : ContentPage
             });
         });
 
-        // INICIO DE PARTIDA PROFESIONAL (Separa X y O)
         _onlineService.HubConnection.On("EmpezarPartida", () => {
             MainThread.BeginInvokeOnMainThread(() => {
-                _partidaEnCurso = true; // Abre candado
+                _partidaEnCurso = true;
 
                 if (_soyAnfitrion)
                 {
@@ -67,7 +65,7 @@ public partial class TicTacToePage : ContentPage
                     _miFicha = "O";
                     _controller.EsTurnoJugador = false;
                     if (string.IsNullOrEmpty(_controller.NombreRival) || _controller.NombreRival == "Rival")
-                        _controller.NombreRival = "Anfitrión"; // Azure no manda el nombre, ponemos el rol
+                        _controller.NombreRival = "Anfitrión";
                     lblEstado.Text = $"TURNO DE {_controller.NombreRival.ToUpper()} (X)";
                 }
                 LimpiarTableroUI();
@@ -75,7 +73,6 @@ public partial class TicTacToePage : ContentPage
             });
         });
 
-        // Revancha blindada
         _onlineService.HubConnection.On("PeticionRevancha", async () => {
             bool ok = await MainThread.InvokeOnMainThreadAsync(async () =>
                 await DisplayAlert("REVANCHA", $"{_controller.NombreRival} pide otra partida.", "SÍ", "NO")
@@ -83,11 +80,11 @@ public partial class TicTacToePage : ContentPage
 
             if (ok)
             {
-                try { await _onlineService.HubConnection.InvokeAsync("AceptarRevancha", _salaId); } catch { }
+                try { await _onlineService.AceptarRevanchaSegura(_salaId); } catch { }
             }
             else
             {
-                try { await _onlineService.HubConnection.InvokeAsync("AbandonarSala", _salaId); } catch { }
+                try { await _onlineService.AbandonarSalaSegura(_salaId); } catch { }
                 MainThread.BeginInvokeOnMainThread(() => FinalizarModoOnline());
             }
         });
@@ -96,12 +93,8 @@ public partial class TicTacToePage : ContentPage
             MainThread.BeginInvokeOnMainThread(() => {
                 LimpiarTableroUI();
                 _partidaEnCurso = true;
-
-                // ¡AQUÍ ESTABA EL BUG DE LA REVANCHA! 
-                // Restauramos el turno correcto según quién sea el anfitrión
                 _controller.EsTurnoJugador = _soyAnfitrion;
 
-                // Restauramos el botón visualmente para que no se quede atascado
                 btnRevancha.Text = "🔥 SOLICITAR REVANCHA";
                 btnRevancha.IsEnabled = true;
                 btnRevancha.IsVisible = false;
@@ -110,7 +103,6 @@ public partial class TicTacToePage : ContentPage
             });
         });
 
-        // Abandono perfecto
         _onlineService.HubConnection.On("JugadorDesconectado", () => {
             MainThread.BeginInvokeOnMainThread(async () => {
                 await DisplayAlert("Partida Cancelada", "El rival ha abandonado la sala.", "OK");
@@ -126,7 +118,7 @@ public partial class TicTacToePage : ContentPage
             layoutDificultad.IsVisible = !online;
             gridOnlineControls.IsVisible = !online;
             btnReiniciar.IsVisible = !online;
-            btnCambiarJuego.IsVisible = !online; // OCULTA EL 4 EN RAYA
+            btnCambiarJuego.IsVisible = !online;
             btnSalirOnline.IsVisible = online;
             if (!online) btnRevancha.IsVisible = false;
         });
@@ -136,7 +128,7 @@ public partial class TicTacToePage : ContentPage
     {
         _salaId = "SALA" + new Random().Next(100, 999);
         _soyAnfitrion = true;
-        _partidaEnCurso = false; // Candado cerrado
+        _partidaEnCurso = false;
         ActualizarInterfazOnline(true);
         lblEstado.Text = "CONECTANDO...";
 
@@ -161,7 +153,7 @@ public partial class TicTacToePage : ContentPage
 
         _salaId = cod;
         _soyAnfitrion = false;
-        _partidaEnCurso = false; // Candado cerrado
+        _partidaEnCurso = false;
         ActualizarInterfazOnline(true);
         lblEstado.Text = "ENVIANDO PETICIÓN...";
 
@@ -179,17 +171,17 @@ public partial class TicTacToePage : ContentPage
 
     private async void OnCasillaClicked(object sender, EventArgs e)
     {
-        if (!_partidaEnCurso && _esOnline) return; // Si no hay rival, bloqueado
+        if (!_partidaEnCurso && _esOnline) return;
         if (!_controller.EsTurnoJugador || _controller.JuegoTerminado) return;
 
-        // BLOQUEO INMEDIATO: Evita clics dobles que rompen el juego
         _controller.EsTurnoJugador = false;
-
         var btn = (Button)sender;
         int idx = (int)btn.CommandParameter;
 
         if (_controller.HacerMovimiento(idx, _miFicha))
         {
+            try { HapticFeedback.Default.Perform(HapticFeedbackType.Click); } catch { }
+
             ActualizarBotonVisual(idx, _miFicha);
 
             if (_esOnline)
@@ -205,19 +197,23 @@ public partial class TicTacToePage : ContentPage
         }
         else
         {
-            _controller.EsTurnoJugador = true; // Si falló el clic, devuelve turno
+            _controller.EsTurnoJugador = true;
         }
     }
 
     private void RecibirJugadaRival(int idx, string ficha)
     {
+        if (!_esOnline) return; // ESCUDO ANTI JUGADAS FANTASMA
         MainThread.BeginInvokeOnMainThread(async () => {
             _controller.HacerMovimiento(idx, ficha);
             ActualizarBotonVisual(idx, ficha);
+
+            try { HapticFeedback.Default.Perform(HapticFeedbackType.Click); } catch { }
+
             await Task.Delay(150);
             if (!await VerificarYProcesarFin())
             {
-                _controller.EsTurnoJugador = true; // AHORA ES TU TURNO
+                _controller.EsTurnoJugador = true;
                 lblEstado.Text = $"TU TURNO ({_miFicha})";
             }
         });
@@ -229,7 +225,7 @@ public partial class TicTacToePage : ContentPage
         if (res == null) return false;
 
         gridTablero.IsEnabled = false;
-        _partidaEnCurso = false; // Fin de partida
+        _partidaEnCurso = false;
 
         if (res != "Empate")
         {
@@ -258,23 +254,33 @@ public partial class TicTacToePage : ContentPage
         bool confirmar = await DisplayAlert("Abandonar", "¿Seguro que quieres salir de la partida online?", "SÍ", "NO");
         if (!confirmar) return;
 
-        try { await _onlineService.HubConnection.InvokeAsync("AbandonarSala", _salaId); } catch { }
+        try { await _onlineService.AbandonarSalaSegura(_salaId); } catch { }
         FinalizarModoOnline();
     }
 
+    // --- REPARACIÓN MASIVA: EL ESCUDO DE RESETEO ---
     private void FinalizarModoOnline()
     {
         _salaId = "";
         _soyAnfitrion = false;
         _partidaEnCurso = false;
-        ActualizarInterfazOnline(false);
-        LimpiarTableroUI();
+        _esOnline = false; // Cortamos conexión
 
-        // Desbloquea el botón por si se quedó pillado en una revancha cancelada
-        btnRevancha.Text = "🔥 SOLICITAR REVANCHA";
-        btnRevancha.IsEnabled = true;
+        _miFicha = "X"; // ¡FIX! Te devolvemos tu corona de X para que no choques con el Bot
+        _controller.NombreRival = "Bot";
 
-        lblEstado.Text = "TU TURNO (X)";
+        MainThread.BeginInvokeOnMainThread(() => {
+            ActualizarInterfazOnline(false);
+            LimpiarTableroUI();
+
+            btnRevancha.Text = "🔥 SOLICITAR REVANCHA";
+            btnRevancha.IsEnabled = true;
+            btnRevancha.IsVisible = false;
+
+            _controller.EsTurnoJugador = true; // ¡FIX! Desbloqueamos el tablero
+            _controller.JuegoTerminado = false;
+            lblEstado.Text = "TU TURNO (X)";
+        });
     }
 
     private async void OnRevanchaClicked(object sender, EventArgs e)
@@ -283,7 +289,7 @@ public partial class TicTacToePage : ContentPage
         {
             btnRevancha.Text = "SOLICITADO...";
             btnRevancha.IsEnabled = false;
-            await _onlineService.HubConnection.InvokeAsync("SolicitarRevancha", _salaId);
+            await _onlineService.SolicitarRevanchaSegura(_salaId);
         }
         catch
         {
@@ -298,6 +304,7 @@ public partial class TicTacToePage : ContentPage
         LimpiarTableroUI();
         if (!_esOnline)
         {
+            _miFicha = "X"; // Por seguridad extrema
             _controller.EsTurnoJugador = true;
             lblEstado.Text = "TU TURNO (X)";
         }
@@ -320,21 +327,31 @@ public partial class TicTacToePage : ContentPage
         btnFacil.BackgroundColor = btnNormal.BackgroundColor = btnDificil.BackgroundColor = btnImposible.BackgroundColor = Color.FromArgb("#1E1E2E");
         b.BackgroundColor = Color.FromArgb("#00C853");
 
-        string diffAjustada = b.Text.Replace("Fácil", "Facil").Replace("Difícil", "Dificil").Replace("💀", "Imposible");
-        _controller.NivelDificultad = (Dificultad)Enum.Parse(typeof(Dificultad), diffAjustada);
+        if (b == btnFacil) _controller.NivelDificultad = Dificultad.Facil;
+        else if (b == btnNormal) _controller.NivelDificultad = Dificultad.Normal;
+        else if (b == btnDificil) _controller.NivelDificultad = Dificultad.Dificil;
+        else if (b == btnImposible) _controller.NivelDificultad = Dificultad.Imposible;
+
         OnReiniciarClicked(null, null);
     }
-
     private async Task TurnoBotMVC()
     {
         _partidaEnCurso = true;
         _controller.EsTurnoJugador = false; lblEstado.Text = "BOT PENSANDO...";
+
         await Task.Delay(600);
+
+        if (_esOnline) return; // ESCUDO: Si le diste a "Online" mientras pensaba, matamos al bot.
+
         int m = _controller.ObtenerMovimientoBot();
         if (m != -1)
         {
             _controller.HacerMovimiento(m, "O"); ActualizarBotonVisual(m, "O");
-            await Task.Delay(150); await VerificarYProcesarFin();
+
+            try { HapticFeedback.Default.Perform(HapticFeedbackType.Click); } catch { }
+
+            await Task.Delay(150);
+            if (await VerificarYProcesarFin()) return;
         }
         if (!_controller.JuegoTerminado) { _controller.EsTurnoJugador = true; lblEstado.Text = "TU TURNO (X)"; }
     }

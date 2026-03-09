@@ -16,8 +16,13 @@ public partial class ImpostorVotingPage : ContentPage
 
         Sospechosos = new ObservableCollection<string>(jugadores);
         listaVotacion.ItemsSource = Sospechosos;
-    }
 
+        Random rnd = new Random();
+        int indiceAleatorio = rnd.Next(jugadores.Count);
+        string jugadorElegido = jugadores[indiceAleatorio];
+
+        lblEmpieza.Text = $"EMPIEZA: {jugadorElegido} 🗣️";
+    }
     protected override bool OnBackButtonPressed() => true;
 
     private async void OnVotoSeleccionado(object sender, SelectionChangedEventArgs e)

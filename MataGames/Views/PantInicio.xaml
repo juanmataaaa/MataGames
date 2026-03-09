@@ -7,13 +7,13 @@
 
     <Grid>
         <VerticalStackLayout
-            Spacing="25"
+            Spacing="30"
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
             <Image
                 Source="dotnet_bot.png"
-                HeightRequest="180"
+                HeightRequest="320"
                 Aspect="AspectFit"
                 HorizontalOptions="Center"/>
 

@@ -6,18 +6,30 @@
              BackgroundColor="#12121A">
 
     <Grid Padding="25">
-        <VerticalStackLayout Spacing="25">
+        <VerticalStackLayout Spacing="20">
 
             <Label Text="⚖️ La Votación" 
                    TextColor="White" 
                    FontSize="32" 
                    FontAttributes="Bold" 
                    HorizontalTextAlignment="Center"
-                   Margin="0,20,0,10"/>
+                   Margin="0,10,0,0"/>
+
+            <Border BackgroundColor="#1A1A24" Stroke="#6C63FF" StrokeThickness="2" Padding="15,10" Margin="0,0,0,5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15"/>
+                </Border.StrokeShape>
+                <Label x:Name="lblEmpieza" 
+                       Text="EMPIEZA: Cargando..." 
+                       TextColor="#6C63FF" 
+                       FontSize="22" 
+                       FontAttributes="Bold" 
+                       HorizontalTextAlignment="Center"/>
+            </Border>
 
             <Label Text="Debatid y elegid a un sospechoso:" 
                    TextColor="#8E8E93" 
-                   FontSize="18" 
+                   FontSize="16" 
                    HorizontalTextAlignment="Center"/>
 
             <Border Style="{StaticResource ConfigCardStyle}" VerticalOptions="FillAndExpand">

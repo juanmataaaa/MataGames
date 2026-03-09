@@ -41,12 +41,12 @@
             <VerticalStackLayout Spacing="20" Padding="25" VerticalOptions="Center" Margin="0,70,0,0">
                 <Label Text="4 EN RAYA" TextColor="White" FontSize="32" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
 
-                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
-                    <Button x:Name="btnFacil" Text="Fácil" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
-                    <Button x:Name="btnNormal" Text="Normal" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#00C853" CornerRadius="10"/>
-                    <Button x:Name="btnDificil" Text="Difícil" WidthRequest="75" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
-                    <Button x:Name="btnImposible" Text="💀" WidthRequest="60" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" CornerRadius="10"/>
-                </HorizontalStackLayout>
+                <FlexLayout JustifyContent="Center" Wrap="Wrap">
+                    <Button x:Name="btnFacil" Text="Fácil" Padding="15,0" Margin="2" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" TextColor="White" CornerRadius="10"/>
+                    <Button x:Name="btnNormal" Text="Normal" Padding="15,0" Margin="2" Clicked="OnDificultadClicked" BackgroundColor="#00C853" TextColor="White" CornerRadius="10"/>
+                    <Button x:Name="btnDificil" Text="Difícil" Padding="15,0" Margin="2" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" TextColor="White" CornerRadius="10"/>
+                    <Button x:Name="btnImposible" Text="💀" Padding="15,0" Margin="2" Clicked="OnDificultadClicked" BackgroundColor="#2C2C3E" TextColor="White" CornerRadius="10"/>
+                </FlexLayout>
 
                 <Label x:Name="lblEstado" Text="Toca una columna para soltar ficha (Verde)" TextColor="#8E8E93" FontSize="16" HorizontalTextAlignment="Center" />
 
@@ -56,15 +56,14 @@
                     </Frame.Shadow>
 
                     <Grid x:Name="gridTablero" 
-                          ColumnDefinitions="45,45,45,45,45,45,45" 
-                          RowDefinitions="45,45,45,45,45,45" 
+                          ColumnDefinitions="38,38,38,38,38,38,38" 
+                          RowDefinitions="38,38,38,38,38,38" 
                           ColumnSpacing="8" 
                           RowSpacing="8">
-
                     </Grid>
                 </Frame>
 
-                <Button Text="🔄 Reiniciar Partida" Clicked="OnReiniciarClicked" BackgroundColor="#2C2C3E" CornerRadius="15" HeightRequest="60" FontAttributes="Bold"/>
+                <Button Text="🔄 Reiniciar Partida" Clicked="OnReiniciarClicked" BackgroundColor="#2C2C3E" TextColor="White" CornerRadius="15" HeightRequest="60" FontAttributes="Bold"/>
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
