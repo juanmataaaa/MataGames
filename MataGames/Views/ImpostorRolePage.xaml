@@ -53,7 +53,7 @@
                                Text="ROL" 
                                Style="{StaticResource InnocentWordStyle}"/>
 
-                        <Label Text="¡Shh! No dejes que nadie vea la pantalla." 
+                        <Label Text="¡Shh! Mute." 
                                TextColor="#8E8E93" 
                                FontSize="14" 
                                FontAttributes="Italic" 

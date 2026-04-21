@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace MataGames.Controllers
+﻿namespace MataGames.Controllers
 {
     public enum Dificultad { Facil, Normal, Dificil, Imposible }
 

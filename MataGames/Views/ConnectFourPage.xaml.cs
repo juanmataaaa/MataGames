@@ -113,12 +113,11 @@ public partial class ConnectFourPage : ContentPage
         else
         {
             lblEstado.Text = res == "X" ? "¡Ganaste! 🎉" : "Perdiste... 💀";
-            DibujarLineaGanadora(); // Llamamos a la magia visual
+            DibujarLineaGanadora(); //  magia visual
         }
         return true;
     }
 
-    // NUEVA FUNCIÓN: Dibuja la línea sobre las fichas
     private void DibujarLineaGanadora()
     {
         var fichas = _controller.FichasGanadoras;

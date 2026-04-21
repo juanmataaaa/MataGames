@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace MataGames.Controllers
+﻿namespace MataGames.Controllers
 {
     public class ImpostorGameController
     {
-        // Corregido a public para que no de error en las fotos
         public List<string> Jugadores { get; private set; }
         private Dictionary<string, string> _roles;
         private int _turnoActualIndex;

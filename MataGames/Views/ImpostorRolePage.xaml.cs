@@ -1,5 +1,4 @@
 ﻿using MataGames.Controllers;
-using Microsoft.Maui.Graphics;
 
 namespace MataGames.Views;
 
@@ -12,7 +11,6 @@ public partial class ImpostorRolePage : ContentPage
     {
         InitializeComponent();
 
-        // Iniciamos el controlador (MVC)
         _controller = new ImpostorGameController(jugadores, palabras, numImpostores);
 
         MostrarTurnoActual();

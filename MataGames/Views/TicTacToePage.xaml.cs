@@ -137,7 +137,7 @@ public partial class TicTacToePage : ContentPage
             await _onlineService.Conectar();
             await _onlineService.HubConnection.InvokeAsync("JoinRoom", _salaId, _miNombreReal);
             lblEstado.Text = "ESPERANDO RIVAL...";
-            await DisplayAlert("SALA CREADA", $"CÓDIGO: {_salaId}\nPásalo para que entren.", "OK");
+            await DisplayAlert("SALA CREADA", $"CÓDIGO: {_salaId}", "OK");
         }
         catch
         {
@@ -266,7 +266,7 @@ public partial class TicTacToePage : ContentPage
         _partidaEnCurso = false;
         _esOnline = false; // Cortamos conexión
 
-        _miFicha = "X"; // ¡FIX! Te devolvemos tu corona de X para que no choques con el Bot
+        _miFicha = "X"; 
         _controller.NombreRival = "Bot";
 
         MainThread.BeginInvokeOnMainThread(() => {
@@ -277,7 +277,7 @@ public partial class TicTacToePage : ContentPage
             btnRevancha.IsEnabled = true;
             btnRevancha.IsVisible = false;
 
-            _controller.EsTurnoJugador = true; // ¡FIX! Desbloqueamos el tablero
+            _controller.EsTurnoJugador = true; 
             _controller.JuegoTerminado = false;
             lblEstado.Text = "TU TURNO (X)";
         });

@@ -183,13 +183,31 @@ public partial class ImpostorSetupPage : ContentPage
             {
                 case "⚽ Futbolistas":
                     palabrasPaquete = new List<string> {
-                        "Messi", "Cristiano Ronaldo", "Maradona", "Pelé", "Neymar", "Zidane", "Ronaldinho", "Iniesta", "Xavi", "Mbappé", "Haaland", "Casillas",
-                        "Modric", "Vinícius", "Bellingham", "Benzema", "Griezmann", "Sergio Ramos", "Piqué", "Puyol", "Busquets", "Kante", "De Bruyne", "Salah",
-                        "Lewandowski", "Neuer", "Buffon", "Roberto Carlos", "Figo", "Ronaldo Nazário", "Romário", "Stoichkov", "Cruyff", "Platini", "Di Stéfano",
-                        "Eusebio", "George Best", "Bobby Charlton", "Bobby Moore", "Beckenbauer", "Maldini", "Baresi", "Cafu", "Roberto Baggio", "Del Piero",
-                        "Totti", "Pirlo", "Seedorf", "Kaká", "Rivaldo", "Thierry Henry", "Vieira", "Bergkamp", "Cantona", "Shearer", "Rooney", "Gerrard",
-                        "Lampard", "Scholes", "Giggs", "John Terry", "Ferdinand"
-                    };
+        // Los Dioses del Fútbol (Históricos y Contemporáneos)
+        "Messi", "Cristiano Ronaldo", "Maradona", "Pelé", "Cruyff",
+        "Di Stéfano", "Zidane", "Ronaldo Nazário", "Ronaldinho",
+        
+        // Superestrellas Actuales (El Top de Hoy)
+        "Mbappé", "Haaland", "Vinícius", "Bellingham", "Neymar",
+        "De Bruyne", "Salah", "Lewandowski", "Lamine Yamal", "Rodri",
+
+        // Leyendas Españolas y del Fútbol Moderno
+        "Casillas", "Iniesta", "Xavi", "Puyol", "Sergio Ramos",
+        "David Villa", "Fernando Torres", "Raúl",
+
+        // Leyendas Históricas Ultra Famosas
+        "Roberto Carlos", "Maldini", "Buffon", "Beckham", "Thierry Henry",
+        "Gerrard", "Lampard", "Pirlo", "Kaká", "Rivaldo",
+
+        // Cracks Actuales Muy Conocidos
+        "Modric", "Kroos", "Griezmann", "Benzema", "Harry Kane",
+        "Pedri", "Fede Valverde", "Phil Foden", "Musiala",
+
+        // Defensas y Porteros (Mezcla Clásicos y Actuales)
+        "Neuer", "Dibu Martínez", "Courtois", "Ter Stegen",
+        "Virgil van Dijk", "Dani Alves", "Cafu", "Beckenbauer"
+    };
+              
                     break;
                 case "🏠 Cosas de Casa":
                     palabrasPaquete = new List<string> {
@@ -208,19 +226,33 @@ public partial class ImpostorSetupPage : ContentPage
                         "Squash", "Remo", "Piragüismo", "Vela", "Windsurf", "Kitesurf", "Motociclismo", "Fórmula 1", "Rally", "Ciclismo de montaña", "BMX",
                         "Triatlón", "Pentatlón", "Esgrima", "Tiro con arco", "Tiro olímpico", "Gimnasia rítmica", "Gimnasia artística", "Halterofilia", "Crossfit",
                         "Yoga", "Pilates", "Karate", "Taekwondo", "Muay Thai", "Lucha libre", "Sumo", "Escalada", "Senderismo", "Alpinismo", "Paracaidismo",
-                        "Puentismo", "Ajedrez", "Billar", "Dardos", "Bolos", "Petanca", "Polo"
+                        "Puenting", "Ajedrez", "Billar", "Dardos", "Bolos", "Petanca", "Polo"
                     };
                     break;
                 case "🎮 Videojuegos":
                     palabrasPaquete = new List<string> {
-                        "Minecraft", "Fortnite", "Super Mario", "GTA V", "Zelda", "Call of Duty", "FIFA", "Pokémon", "Tetris", "Pac-Man", "League of Legends", "Roblox",
-                        "Halo", "Gears of War", "God of War", "Uncharted", "The Last of Us", "Resident Evil", "Silent Hill", "Metal Gear Solid", "Final Fantasy",
-                        "Dragon Quest", "Kingdom Hearts", "Street Fighter", "Mortal Kombat", "Tekken", "SoulCalibur", "Super Smash Bros", "Mario Kart", "Sonic",
-                        "Crash Bandicoot", "Spyro", "Tomb Raider", "Assassin's Creed", "Far Cry", "Watch Dogs", "Splinter Cell", "Rainbow Six", "Ghost Recon",
-                        "Fallout", "Skyrim", "Oblivion", "Starfield", "Mass Effect", "Dragon Age", "The Witcher", "Cyberpunk 2077", "Elden Ring", "Dark Souls",
-                        "Bloodborne", "Sekiro", "Monster Hunter", "Devil May Cry", "Bayonetta", "Persona", "Yakuza", "Red Dead Redemption", "Bioshock",
-                        "Borderlands", "Destiny", "Overwatch", "Valorant"
-                    };
+        // Fenómenos Mundiales y Casuales
+        "Minecraft", "Fortnite", "Roblox", "Los Sims", "Among Us",
+        "Fall Guys", "Animal Crossing", "Tetris", "Pac-Man",
+
+        // Nintendo y Plataformas (Para todos los públicos)
+        "Super Mario Maker", "Mario Kart", "Super Smash Bros", "Zelda",
+        "Pokémon", "Sonic", "Crash Bandicoot",
+
+        // Shooters y Competitivos Top
+        "Call of Duty", "Valorant", "Overwatch", "League of Legends",
+        "FIFA", "EA FC", "Rocket League",
+
+        // Aventura, Acción y Mundo Abierto (Los más famosos)
+        "GTA V", "Red Dead Redemption", "The Last of Us", "Spider-Man",
+        "God of War", "Uncharted", "Tomb Raider", "Assassin's Creed",
+        "Cyberpunk 2077", "The Witcher", "Skyrim", "Fallout",
+
+        // Terror y Pelea (Solo los más icónicos)
+        "Resident Evil", "Five Nights at Freddy's",
+        "Street Fighter", "Mortal Kombat", "Tekken"
+    };
+                    
                     break;
             }
 

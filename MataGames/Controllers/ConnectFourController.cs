@@ -54,7 +54,7 @@ namespace MataGames.Controllers
                     mejorColumna = ObtenerMejorMovimientoMinimax(4);
                     break;
                 case Dificultad.Imposible:
-                    // Calavera: Piensa 6 jugadas por adelantado. ¡Indestructible!
+                    // Calavera: Piensa 6 jugadas por adelantado.
                     mejorColumna = ObtenerMejorMovimientoMinimax(6);
                     break;
             }
@@ -69,7 +69,6 @@ namespace MataGames.Controllers
             return disponibles.Count > 0 ? disponibles[rnd.Next(disponibles.Count)] : -1;
         }
 
-        // 👉 INICIO DEL ALGORITMO MINIMAX
         private int ObtenerMejorMovimientoMinimax(int profundidadMax)
         {
             int mejorPuntaje = int.MinValue;
@@ -114,7 +113,7 @@ namespace MataGames.Controllers
                     DeshacerTiro(f, c);
                     maxEval = Math.Max(maxEval, eval);
                     alfa = Math.Max(alfa, eval);
-                    if (beta <= alfa) break; // Poda: no calcula si ya sabe que es malo
+                    if (beta <= alfa) break; 
                 }
                 return maxEval;
             }
@@ -129,13 +128,12 @@ namespace MataGames.Controllers
                     DeshacerTiro(f, c);
                     minEval = Math.Min(minEval, eval);
                     beta = Math.Min(beta, eval);
-                    if (beta <= alfa) break; // Poda
+                    if (beta <= alfa) break; 
                 }
                 return minEval;
             }
         }
 
-        // 👉 CEREBRO MATEMÁTICO: PUNTÚA EL TABLERO
         private int EvaluarTableroCompleto()
         {
             int puntaje = 0;

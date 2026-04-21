@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Generic;
 
 namespace MataGames.Controllers
 {
@@ -8,8 +7,6 @@ namespace MataGames.Controllers
         public ObservableCollection<string> Jugadores { get; set; }
         public ObservableCollection<string> Palabras { get; set; }
         public int NumeroImpostores { get; private set; }
-
-        // Nuevas variables para saber si estamos usando un paquete
         public bool EsModoAutomatico { get; private set; }
         public string NombrePaqueteAutomatico { get; private set; }
 
@@ -18,7 +15,7 @@ namespace MataGames.Controllers
             Jugadores = new ObservableCollection<string>();
             Palabras = new ObservableCollection<string>();
             NumeroImpostores = 1;
-            EsModoAutomatico = false; // Por defecto empezamos en manual
+            EsModoAutomatico = false; 
 
             if (!string.IsNullOrWhiteSpace(creadorDeLaSala))
             {
@@ -31,9 +28,9 @@ namespace MataGames.Controllers
             if (!string.IsNullOrWhiteSpace(nombre) && !Jugadores.Contains(nombre.Trim()))
             {
                 Jugadores.Add(nombre.Trim());
-                return true; // Éxito
+                return true; 
             }
-            return false; // Duplicado o vacío
+            return false; 
         }
 
         public bool AgregarPalabra(string palabra)
@@ -41,7 +38,7 @@ namespace MataGames.Controllers
             if (!EsModoAutomatico && !string.IsNullOrWhiteSpace(palabra) && !Palabras.Contains(palabra.Trim()))
             {
                 Palabras.Add(palabra.Trim());
-                return true; // Éxito
+                return true; 
             }
             return false; // Duplicado o modo automático
         }
